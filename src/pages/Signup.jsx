@@ -178,12 +178,12 @@ function Signup() {
         </form>
 
         {/* ✅ Continue as Guest Button */}
-       <button
-                 onClick={handleDemoLogin}
-                 className="mt-4 w-full flex items-center justify-center gap-2 bg-gradient-to-r from-pink-500 to-red-500 hover:from-red-500 hover:to-pink-500 text-white font-semibold py-2.5 sm:py-3 rounded-full shadow-lg transition duration-300 text-sm sm:text-base"
-               >
-                 <Beaker size={18} /> Try Demo Mode
-               </button>
+        <button
+          onClick={handleDemoLogin}
+          className="mt-4 w-full flex items-center justify-center gap-2 bg-gradient-to-r from-pink-500 to-red-500 hover:from-red-500 hover:to-pink-500 text-white font-semibold py-2.5 sm:py-3 rounded-full shadow-lg transition duration-300 text-sm sm:text-base"
+        >
+          <Beaker size={18} /> Try Demo Mode
+        </button>
 
         {/* Redirect to login */}
         <p className="text-center text-gray-700 mt-4 sm:mt-6 text-sm sm:text-base">
