@@ -4,6 +4,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { signupUser, resetSignup } from "../features/auth/authSlice";
 import { Link, useNavigate } from "react-router-dom";
 import SplashCursor from "../components/ui/SplashCursor";
+import { Orbit, Star, Sparkles } from "lucide-react";
+
+// ✅ Hook to detect mobile
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+  return isMobile;
+};
 
 function Signup() {
   const dispatch = useDispatch();
@@ -15,12 +28,8 @@ function Signup() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [formError, setFormError] = useState("");
-  const [isMobile, setIsMobile] = useState(false);
 
-  // Detect mobile to disable cursor effect
-  useEffect(() => {
-    setIsMobile(window.innerWidth < 640);
-  }, []);
+  const isMobile = useIsMobile();
 
   // Handle form submit
   const handleSubmit = (e) => {
@@ -52,23 +61,39 @@ function Signup() {
   }, [signupSuccess, navigate, dispatch]);
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center relative overflow-hidden text-white px-4 sm:px-6">
-      {/* 💫 Splash Cursor (only desktop) */}
+    <div className="relative min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-[#1a1a2e] via-[#2a003f] to-[#3d0066] text-white px-4 sm:px-6 overflow-hidden">
+      {/* ✅ Only show SplashCursor on desktop */}
       {!isMobile && <SplashCursor />}
+      <div className="absolute top-4 sm:top-6 left-4 sm:left-6 flex items-center gap-2 z-20">
+        <Orbit className="w-6 h-6 sm:w-8 sm:h-8 text-pink-400 drop-shadow-md animate-spin-slow" />
+        <span className="text-xl sm:text-2xl font-bold tracking-wide">
+          Orbit
+        </span>
+      </div>
 
-      {/* Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 via-purple-700 to-pink-600 animate-gradient-x"></div>
+      {/* Glow background */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-pink-500/20 blur-3xl opacity-70" />
 
-      {/* Floating Blobs */}
-      <div className="absolute w-48 sm:w-72 h-48 sm:h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-25 animate-blob top-10 left-6 sm:left-10"></div>
-      <div className="absolute w-48 sm:w-72 h-48 sm:h-72 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-25 animate-blob animation-delay-2000 bottom-10 right-6 sm:right-10"></div>
-      <div className="absolute w-48 sm:w-72 h-48 sm:h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-25 animate-blob animation-delay-4000 top-1/2 left-1/4 sm:left-1/3"></div>
+      {/* Decorative Stars + Sparkles (not on mobile for performance) */}
+      {!isMobile && (
+        <>
+          <Star className="absolute bottom-16 right-8 sm:right-14 w-8 sm:w-10 h-8 sm:h-10 text-yellow-200/30 animate-pulse" />
+          <Sparkles className="absolute top-1/3 left-1/6 sm:left-1/4 w-6 sm:w-8 h-6 sm:h-8 text-white/25 animate-bounce" />
+          <Star className="absolute top-10 right-6 sm:right-10 w-4 sm:w-6 h-4 sm:h-6 text-pink-300/40 animate-ping" />
+          <Star className="absolute bottom-1/4 left-1/4 sm:left-1/3 w-3 sm:w-4 h-3 sm:h-4 text-purple-300/40 animate-bounce" />
+        </>
+      )}
 
       {/* Signup Card */}
-      <div className="relative backdrop-blur-xl bg-white/80 border border-white/30 text-gray-900 shadow-2xl rounded-2xl sm:rounded-3xl p-6 sm:p-10 max-w-sm sm:max-w-md w-full transition duration-500 hover:shadow-pink-400/30">
-        <h2 className="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-indigo-500 to-pink-500 bg-clip-text text-transparent text-center mb-6 sm:mb-8">
-          Create Account
-        </h2>
+      <div className="relative backdrop-blur-xl bg-white/80 border border-white/30 text-gray-900 shadow-2xl rounded-2xl sm:rounded-3xl p-6 sm:p-10 max-w-sm sm:max-w-md w-full transition duration-500 hover:shadow-pink-400/30 z-10">
+        {/* Title with Orbit + Sparkles */}
+        <div className="flex items-center justify-center gap-2 mb-6 sm:mb-8">
+          <Orbit className="w-7 h-7 text-pink-400 animate-spin-slow" />
+          <h2 className="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-indigo-500 to-pink-500 bg-clip-text text-transparent">
+            Create Account
+          </h2>
+          <Sparkles className="w-5 h-5 text-yellow-300 animate-pulse" />
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
           <input
