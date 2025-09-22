@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { signupUser, resetSignup } from "../features/auth/authSlice";
 import { Link, useNavigate } from "react-router-dom";
-import SplashCursor from "../components/ui/SplashCursor";
+// import SplashCursor from "../components/ui/SplashCursor";
 import { Orbit, Star, Sparkles } from "lucide-react";
 
 // ✅ Hook to detect mobile
@@ -63,7 +63,7 @@ function Signup() {
   return (
     <div className="relative min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-[#1a1a2e] via-[#2a003f] to-[#3d0066] text-white px-4 sm:px-6 overflow-hidden">
       {/* ✅ Only show SplashCursor on desktop */}
-      {!isMobile && <SplashCursor />}
+      {/* {!isMobile && <SplashCursor />} */}
       <div className="absolute top-4 sm:top-6 left-4 sm:left-6 flex items-center gap-2 z-20">
         <Orbit className="w-6 h-6 sm:w-8 sm:h-8 text-pink-400 drop-shadow-md animate-spin-slow" />
         <span className="text-xl sm:text-2xl font-bold tracking-wide">

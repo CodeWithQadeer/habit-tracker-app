@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { LogIn, UserPlus, Orbit, Star, Sparkles } from "lucide-react";
 import DecryptedText from "../components/ui/DecryptedText";
 import RotatingText from "@/components/ui/RotatingText";
-import SplashCursor from "../components/ui/SplashCursor";
+// import SplashCursor from "../components/ui/SplashCursor";
 import { useEffect, useState } from "react";
 
 // ✅ Hook to detect mobile
@@ -24,7 +24,7 @@ const LandingPage = () => {
   return (
     <div className="relative min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-[#1a1a2e] via-[#2a003f] to-[#3d0066] text-white px-4 sm:px-6 overflow-hidden">
       {/* ✅ Only show SplashCursor on desktop */}
-      {!isMobile && <SplashCursor />}
+      {/* {!isMobile && <SplashCursor />} */}
 
       {/* Glow background */}
       <div className="absolute inset-0 -z-10 bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-pink-500/20 blur-3xl opacity-70" />

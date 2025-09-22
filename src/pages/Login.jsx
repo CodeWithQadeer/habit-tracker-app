@@ -1,13 +1,12 @@
-// src/pages/Login.jsx
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../features/auth/authSlice";
 import { resetHabitsOnLogin } from "../features/habits/habitsSlice";
 import { Link, useNavigate } from "react-router-dom";
-import SplashCursor from "../components/ui/SplashCursor";
+// import SplashCursor from "../components/ui/SplashCursor";
 import { Orbit, Star, Sparkles } from "lucide-react";
 
-// ✅ Hook to detect mobile
+// Hook to detect mobile
 const useIsMobile = () => {
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -56,7 +55,7 @@ function Login() {
   return (
     <div className="relative min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-[#1a1a2e] via-[#2a003f] to-[#3d0066] text-white px-4 sm:px-6 overflow-hidden">
       {/* ✨ Only show SplashCursor on desktop */}
-      {!isMobile && <SplashCursor />}
+      {/* {!isMobile && <SplashCursor />} */}
 
       {/* Glow background */}
       <div className="absolute inset-0 -z-10 bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-pink-500/20 blur-3xl opacity-70" />
