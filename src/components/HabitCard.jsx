@@ -1,26 +1,25 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { db } from "../utils/firebase";
 import { ref, onValue, set, remove } from "firebase/database";
-import { Trash2, CheckCircle } from "lucide-react"; // ✅ Icons
+import { Trash2, CheckCircle } from "lucide-react";
 
+// 🔹 Utils
 const toISODate = (date) => new Date(date).toLocaleDateString("en-CA");
 
 const getWeekDays = () => {
   const today = new Date();
-  const week = [];
-  for (let i = -3; i <= 3; i++) {
+  return Array.from({ length: 7 }, (_, i) => {
     const d = new Date(today);
-    d.setDate(today.getDate() + i);
-    week.push({
+    d.setDate(today.getDate() + i - 3);
+    return {
       label: d.toLocaleDateString("en-US", { weekday: "short" }),
       date: toISODate(d),
-      isToday: i === 0,
-      isPast: i < 0,
-      isFuture: i > 0,
-    });
-  }
-  return week;
+      isToday: i === 3,
+      isPast: i < 3,
+      isFuture: i > 3,
+    };
+  });
 };
 
 const showReminderNotification = (habitName) => {
@@ -35,52 +34,65 @@ const showReminderNotification = (habitName) => {
 const HabitCard = ({ habit }) => {
   const { user } = useSelector((state) => state.auth);
   const [history, setHistory] = useState({});
-  const [weekDays, setWeekDays] = useState(getWeekDays());
 
+  // 🔹 Memoized week days
+  const weekDays = useMemo(() => getWeekDays(), []);
+
+  // 🔹 Fetch history from Firebase
   useEffect(() => {
     if (!user?.uid || !habit?.id) return;
 
     const historyRef = ref(db, `users/${user.uid}/habits/${habit.id}/history`);
-    const unsubscribe = onValue(historyRef, (snapshot) => {
-      setHistory(snapshot.exists() ? snapshot.val() : {});
-    });
+    const unsubscribe = onValue(historyRef, (snapshot) =>
+      setHistory(snapshot.exists() ? snapshot.val() : {})
+    );
 
     return () => unsubscribe();
   }, [user?.uid, habit?.id]);
 
-  const toggleToday = async (dayStr, checked) => {
-    if (!user?.uid) return;
-    const dayRef = ref(
-      db,
-      `users/${user.uid}/habits/${habit.id}/history/${dayStr}`
-    );
-    checked ? await set(dayRef, true) : await remove(dayRef);
-  };
+  // 🔹 Toggle habit completion
+  const toggleToday = useCallback(
+    async (dayStr, checked) => {
+      if (!user?.uid) return;
+      const dayRef = ref(
+        db,
+        `users/${user.uid}/habits/${habit.id}/history/${dayStr}`
+      );
+      checked ? await set(dayRef, true) : await remove(dayRef);
+    },
+    [user?.uid, habit?.id]
+  );
 
-  const deleteHabit = async () => {
+  // 🔹 Delete habit
+  const deleteHabit = useCallback(async () => {
     if (!user?.uid) return;
     await remove(ref(db, `users/${user.uid}/habits/${habit.id}`));
-  };
+  }, [user?.uid, habit?.id]);
 
-  // ⏰ Reminder check
+  // 🔹 Reminder check
   useEffect(() => {
     if (!habit?.reminderTime) return;
+
     const interval = setInterval(() => {
-      const now = new Date();
-      const currentTime = now.toTimeString().slice(0, 5);
-      if (currentTime === habit.reminderTime)
-        showReminderNotification(habit.name);
+      const now = new Date().toTimeString().slice(0, 5);
+      if (now === habit.reminderTime) showReminderNotification(habit.name);
     }, 60 * 1000);
+
     return () => clearInterval(interval);
   }, [habit?.reminderTime, habit?.name]);
 
   return (
-    <div className="relative bg-gradient-to-br from-[#1a1a2e]/90 to-[#2a003f]/90 border border-violet-500/30 backdrop-blur-xl rounded-2xl p-4 sm:p-5 shadow-lg hover:shadow-pink-500/30 transition-all">
+    <div
+      className="relative bg-gradient-to-br from-[#1a1a2e]/90 to-[#2a003f]/90 
+                 border border-violet-500/30 backdrop-blur-xl rounded-2xl 
+                 p-4 sm:p-5 shadow-lg hover:shadow-pink-500/30 
+                 transition-all duration-300"
+    >
       {/* Glow background */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 blur-2xl opacity-70" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 blur-2xl opacity-70 pointer-events-none" />
 
-      {/* Header → mobile stack / desktop row */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4 mb-3">
+      {/* Header */}
+      <div className="flex items-start sm:items-center justify-between gap-3 mb-3">
         <div className="flex-1 min-w-0">
           <h3 className="font-bold text-base sm:text-lg text-white truncate">
             {habit.name}
@@ -90,8 +102,12 @@ const HabitCard = ({ habit }) => {
           </p>
         </div>
         <button
-          onClick={deleteHabit}
-          className="shrink-0 self-start sm:self-center text-pink-400 hover:text-pink-300 transition"
+          onClick={(e) => {
+            e.stopPropagation(); // ✅ prevents bubbling
+            deleteHabit();
+          }}
+          className="shrink-0 text-pink-400 hover:text-pink-300 active:scale-90 transition"
+          aria-label="Delete habit"
         >
           <Trash2 size={20} />
         </button>
@@ -109,7 +125,7 @@ const HabitCard = ({ habit }) => {
           return (
             <div
               key={day.date}
-              className="flex flex-col items-center justify-center text-center"
+              className="flex flex-col items-center text-center select-none"
             >
               <span
                 className={`text-[10px] sm:text-xs mb-1 ${
@@ -125,6 +141,7 @@ const HabitCard = ({ habit }) => {
                   checked={!!completed}
                   onChange={(e) => toggleToday(day.date, e.target.checked)}
                   className="w-4 h-4 sm:w-5 sm:h-5 cursor-pointer accent-pink-500 hover:scale-110 transition"
+                  aria-label={`Mark ${habit.name} as completed for today`}
                 />
               ) : completed ? (
                 <CheckCircle className="text-green-400 w-4 h-4 sm:w-5 sm:h-5" />

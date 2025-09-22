@@ -1,10 +1,10 @@
 // src/components/Achievements.jsx
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { db } from "../utils/firebase";
 import { ref, onValue } from "firebase/database";
 
-// 🔹 Define achievements in ascending order
+// 🔹 Achievements in ascending order
 const achievementsList = [
   { streak: 3, name: "Starter Badge 🌱", color: "#9ACD32" },
   { streak: 7, name: "Bronze Badge 🥉", color: "#CD7F32" },
@@ -16,27 +16,23 @@ const achievementsList = [
   { streak: 100, name: "Legendary Badge 👑", color: "#9400D3" },
 ];
 
-// ✅ copy same function from Streak.jsx
+// ✅ streak calculator (optimized loop)
 const calculateStreak = (history = {}) => {
   const completed = Object.keys(history)
-    .filter((d) => history[d] === true)
+    .filter((d) => history[d])
     .sort((a, b) => new Date(b) - new Date(a));
 
-  if (completed.length === 0) return 0;
+  if (!completed.length) return 0;
 
   let streak = 1;
   let prevDate = new Date(completed[0]);
 
   for (let i = 1; i < completed.length; i++) {
     const d = new Date(completed[i]);
-    const diff = (prevDate - d) / (1000 * 60 * 60 * 24);
-
-    if (diff === 1) {
+    if ((prevDate - d) / (1000 * 60 * 60 * 24) === 1) {
       streak++;
       prevDate = d;
-    } else {
-      break;
-    }
+    } else break;
   }
 
   return streak;
@@ -46,9 +42,9 @@ const Achievements = () => {
   const { user } = useSelector((state) => state.auth);
   const [longestStreak, setLongestStreak] = useState(0);
 
+  // 🔹 Fetch habits from Firebase
   useEffect(() => {
     if (!user?.uid) return;
-
     const habitsRef = ref(db, `users/${user.uid}/habits`);
 
     const unsubscribe = onValue(habitsRef, (snapshot) => {
@@ -60,10 +56,10 @@ const Achievements = () => {
       const data = snapshot.val();
       let maxStreak = 0;
 
-      Object.values(data).forEach((habit) => {
+      for (const habit of Object.values(data)) {
         const streak = calculateStreak(habit.history || {});
         if (streak > maxStreak) maxStreak = streak;
-      });
+      }
 
       setLongestStreak(maxStreak);
     });
@@ -71,7 +67,11 @@ const Achievements = () => {
     return () => unsubscribe();
   }, [user]);
 
-  const nextMilestone = achievementsList.find((a) => longestStreak < a.streak);
+  // 🔹 Compute next milestone (memoized)
+  const nextMilestone = useMemo(
+    () => achievementsList.find((a) => longestStreak < a.streak),
+    [longestStreak]
+  );
 
   return (
     <div className="p-4 sm:p-6 rounded-2xl shadow-lg bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-pink-500/10 backdrop-blur-xl border border-white/20">
@@ -91,61 +91,66 @@ const Achievements = () => {
         </div>
       )}
 
+      {/* Achievements grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {achievementsList.map((ach, i) => {
-          const unlocked = longestStreak >= ach.streak;
-          return (
-            <div
-              key={i}
-              className={`p-4 sm:p-5 rounded-xl relative overflow-hidden transition-all transform hover:scale-[1.03] hover:shadow-xl backdrop-blur-md`}
-              style={{
-                background: unlocked
-                  ? `linear-gradient(135deg, ${ach.color}AA, ${ach.color}FF)`
-                  : "rgba(255,255,255,0.4)",
-                opacity: unlocked ? 1 : 0.6,
-              }}
-            >
-              <div className="flex items-center justify-between">
-                <span
-                  className={`text-base sm:text-lg font-semibold ${
-                    unlocked ? "text-white" : "text-gray-700"
-                  } drop-shadow-md`}
-                >
-                  {ach.name}
-                </span>
-                {unlocked ? (
-                  <span className="text-white text-lg sm:text-xl">✅</span>
-                ) : (
-                  <span className="text-gray-700 text-lg sm:text-xl">🔒</span>
-                )}
-              </div>
+  const unlocked = longestStreak >= ach.streak;
 
-              {/* Progress bar */}
-              {!unlocked && (
-                <div className="mt-3 w-full bg-gray-300/70 rounded-full h-2">
-                  <div
-                    className="h-2 rounded-full transition-all"
-                    style={{
-                      width: `${Math.min(
-                        (longestStreak / ach.streak) * 100,
-                        100
-                      )}%`,
-                      backgroundColor: ach.color,
-                    }}
-                  ></div>
-                </div>
-              )}
+  return (
+    <div
+      key={i}
+      className="p-4 sm:p-5 rounded-xl relative overflow-hidden transition-transform duration-300 hover:scale-[1.03] hover:shadow-xl backdrop-blur-md"
+      style={{
+        background: unlocked
+          ? `linear-gradient(135deg, ${ach.color}AA, ${ach.color}FF)`
+          : "rgba(255,255,255,0.4)",
+        opacity: unlocked ? 1 : 0.6,
+      }}
+    >
+      <div className="flex items-center justify-between">
+        <span
+          className={`text-base sm:text-lg font-semibold ${
+            unlocked ? "text-white" : "text-gray-700"
+          } drop-shadow-md`}
+        >
+          {ach.name}
+        </span>
+        <span
+          className={`text-lg sm:text-xl ${
+            unlocked ? "text-white" : "text-gray-700"
+          }`}
+        >
+          {unlocked ? "✨" : "🔒"}
+        </span>
+      </div>
 
-              <p
-                className={`text-xs sm:text-sm mt-3 ${
-                  unlocked ? "text-white/90" : "text-gray-600"
-                }`}
-              >
-                Unlock at {ach.streak} days
-              </p>
-            </div>
-          );
-        })}
+      {/* Progress bar (only for locked) */}
+      {!unlocked && (
+        <div className="mt-3 w-full bg-gray-300/70 rounded-full h-2">
+          <div
+            className="h-2 rounded-full transition-all"
+            style={{
+              width: `${Math.min((longestStreak / ach.streak) * 100, 100)}%`,
+              backgroundColor: ach.color,
+            }}
+          />
+        </div>
+      )}
+
+      {/* 🔹 Text changes based on unlock status */}
+      <p
+        className={`text-xs sm:text-sm mt-3 ${
+          unlocked ? "text-white/90" : "text-gray-600"
+        }`}
+      >
+        {unlocked
+          ? `Consistent for ${ach.streak} days`
+          : `Unlock at ${ach.streak} days`}
+      </p>
+    </div>
+  );
+})}
+
       </div>
     </div>
   );

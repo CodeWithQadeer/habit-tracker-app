@@ -1,14 +1,30 @@
 // src/pages/LandingPage.jsx
 import { Link } from "react-router-dom";
 import { LogIn, UserPlus, Orbit, Star, Sparkles } from "lucide-react";
-import SplashCursor from "../components/ui/SplashCursor";
 import DecryptedText from "../components/ui/DecryptedText";
 import RotatingText from "@/components/ui/RotatingText";
+import SplashCursor from "../components/ui/SplashCursor";
+import { useEffect, useState } from "react";
+
+// ✅ Hook to detect mobile
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+  return isMobile;
+};
 
 const LandingPage = () => {
+  const isMobile = useIsMobile();
+
   return (
     <div className="relative min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-[#1a1a2e] via-[#2a003f] to-[#3d0066] text-white px-4 sm:px-6 overflow-hidden">
-      <SplashCursor />
+      {/* ✅ Only show SplashCursor on desktop */}
+      {!isMobile && <SplashCursor />}
 
       {/* Glow background */}
       <div className="absolute inset-0 -z-10 bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-pink-500/20 blur-3xl opacity-70" />
@@ -19,14 +35,15 @@ const LandingPage = () => {
         <span className="text-xl sm:text-2xl font-bold tracking-wide">Orbit</span>
       </div>
 
-      {/* Decorative icons */}
-      <Star className="absolute bottom-16 right-8 sm:right-14 w-8 sm:w-10 h-8 sm:h-10 text-yellow-200/30 animate-pulse" />
-      <Sparkles className="absolute top-1/3 right-1/6 sm:right-1/4 w-6 sm:w-8 h-6 sm:h-8 text-white/25 animate-bounce" />
-      <Star className="absolute top-10 right-6 sm:right-10 w-4 sm:w-6 h-4 sm:h-6 text-pink-300/40 animate-ping" />
-      <Star className="absolute top-1/4 left-6 sm:left-10 w-4 sm:w-5 h-4 sm:h-5 text-indigo-300/30 animate-pulse" />
-      <Star className="absolute bottom-1/4 left-1/4 sm:left-1/3 w-3 sm:w-4 h-3 sm:h-4 text-purple-300/40 animate-bounce" />
-      <Sparkles className="absolute top-2/3 right-1/4 sm:right-1/3 w-4 sm:w-5 h-4 sm:h-5 text-white/30 animate-pulse" />
-      <Star className="absolute bottom-8 sm:bottom-10 left-8 sm:left-14 w-4 sm:w-6 h-4 sm:h-6 text-yellow-200/20 animate-ping" />
+      {/* Decorative icons (fewer on mobile for performance) */}
+      {!isMobile && (
+        <>
+          <Star className="absolute bottom-16 right-8 sm:right-14 w-8 sm:w-10 h-8 sm:h-10 text-yellow-200/30 animate-pulse" />
+          <Sparkles className="absolute top-1/3 right-1/6 sm:right-1/4 w-6 sm:w-8 h-6 sm:h-8 text-white/25 animate-bounce" />
+          <Star className="absolute top-10 right-6 sm:right-10 w-4 sm:w-6 h-4 sm:h-6 text-pink-300/40 animate-ping" />
+          <Star className="absolute bottom-1/4 left-1/4 sm:left-1/3 w-3 sm:w-4 h-3 sm:h-4 text-purple-300/40 animate-bounce" />
+        </>
+      )}
 
       <div className="text-center max-w-2xl sm:max-w-3xl relative z-10">
         {/* Heading */}
@@ -60,27 +77,25 @@ const LandingPage = () => {
       </div>
 
       {/* Buttons */}
-{/* Buttons */}
-<div className="mt-10 sm:mt-12 flex flex-col sm:flex-row gap-4 sm:gap-6 relative z-10 justify-center items-center">
-  <Link
-    to="/login"
-    className="flex items-center gap-2 px-6 py-2 sm:px-8 sm:py-3 rounded-2xl font-semibold shadow-lg
-    bg-white/10 backdrop-blur-md border border-white/20 
-    hover:bg-white/20 hover:scale-105 transition text-sm sm:text-base"
-  >
-    <LogIn size={18} /> Login
-  </Link>
-  <Link
-    to="/signup"
-    className="flex items-center gap-2 px-6 py-2 sm:px-8 sm:py-3 rounded-2xl font-semibold shadow-lg
-    bg-gradient-to-r from-indigo-700 to-purple-800 text-white 
-    border border-indigo-400/40 
-    hover:scale-105 hover:brightness-110 transition text-sm sm:text-base"
-  >
-    <UserPlus size={18} /> Sign Up
-  </Link>
-</div>
-
+      <div className="mt-10 sm:mt-12 flex flex-col sm:flex-row gap-4 sm:gap-6 relative z-10 justify-center items-center">
+        <Link
+          to="/login"
+          className="flex items-center gap-2 px-6 py-2 sm:px-8 sm:py-3 rounded-2xl font-semibold shadow-lg
+          bg-white/10 backdrop-blur-md border border-white/20 
+          hover:bg-white/20 hover:scale-105 transition text-sm sm:text-base"
+        >
+          <LogIn size={18} /> Login
+        </Link>
+        <Link
+          to="/signup"
+          className="flex items-center gap-2 px-6 py-2 sm:px-8 sm:py-3 rounded-2xl font-semibold shadow-lg
+          bg-gradient-to-r from-indigo-700 to-purple-800 text-white 
+          border border-indigo-400/40 
+          hover:scale-105 hover:brightness-110 transition text-sm sm:text-base"
+        >
+          <UserPlus size={18} /> Sign Up
+        </Link>
+      </div>
 
       {/* Small text */}
       <div className="mt-8 sm:mt-10 text-xs sm:text-sm text-gray-300 relative z-10">

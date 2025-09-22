@@ -6,9 +6,9 @@ import {
   signInWithEmailAndPassword,
   signOut as firebaseSignOut,
 } from "firebase/auth";
-import { get, ref, set, push } from "firebase/database";
+import { get, ref, set, push, update } from "firebase/database";
 
-// default habits
+// default habits (kept here only)
 const defaultHabits = [
   {
     name: "Drink Water",
@@ -36,7 +36,7 @@ const defaultHabits = [
   },
 ];
 
-// signup
+// --- signup ---
 export const signupUser = createAsyncThunk(
   "auth/signupUser",
   async ({ username, email, password }, { rejectWithValue }) => {
@@ -50,25 +50,26 @@ export const signupUser = createAsyncThunk(
 
       // Save user profile
       await set(ref(db, "users/" + user.uid), {
-        username: username,
-        email: email,
+        username,
+        email,
       });
 
-      // Add default habits
-      for (const habit of defaultHabits) {
-        await set(push(ref(db, `users/${user.uid}/habits`)), habit);
-      }
+      // Batch add default habits (optimization)
+      const habitsRef = ref(db, `users/${user.uid}/habits`);
+      const updates = {};
+      defaultHabits.forEach((habit) => {
+        const newRef = push(habitsRef);
+        updates[newRef.key] = habit;
+      });
+      await update(habitsRef, updates);
 
-      // **Important**: Firebase auto-signs-in the new user.
-      // Sign them out so they must explicitly log in (so your UI won't auto-redirect).
+      // Force explicit login
       try {
         await firebaseSignOut(auth);
       } catch (err) {
-        // Non-fatal; continue
         console.warn("Failed to sign out after signup:", err);
       }
 
-      // Return a flag that signup completed (no user object)
       return { signupOnly: true };
     } catch (error) {
       return rejectWithValue(error.message ?? "An unknown error occurred");
@@ -76,7 +77,7 @@ export const signupUser = createAsyncThunk(
   }
 );
 
-// login
+// --- login ---
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async ({ email, password }, { rejectWithValue }) => {
@@ -89,10 +90,7 @@ export const loginUser = createAsyncThunk(
       const user = userCredentials.user;
 
       const snapshot = await get(ref(db, "users/" + user.uid));
-      let username = null;
-      if (snapshot.exists()) {
-        username = snapshot.val().username;
-      }
+      const username = snapshot.exists() ? snapshot.val().username : null;
 
       return {
         uid: user.uid,
@@ -105,6 +103,7 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+// --- initial state ---
 const initialState = {
   user: null,
   loading: false,
@@ -112,6 +111,7 @@ const initialState = {
   signupSuccess: false,
 };
 
+// --- slice ---
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -129,6 +129,7 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // signup
       .addCase(signupUser.pending, (state) => {
         state.loading = true;
       })
@@ -145,6 +146,7 @@ const authSlice = createSlice({
             ? action.payload
             : "An unknown error occurred";
       })
+      // login
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
       })

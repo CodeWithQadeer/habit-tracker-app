@@ -1,8 +1,9 @@
 {
   "users": {
-    "dbKufxXAAWMAYHc0ix95JFKrnZ03": {
-      "email": "q@q.com",
-      "username": "Syed Abdul Qadeer",
+    "HBXDmsFVyeePOILyxgD85a4foJh1": {
+      "email": "username@example.com",
+      "username": "Example",
+
       "habits": {
         "-O_g7x-WBaMHGJhP3NDu": {
           "name": "Read a book",
@@ -203,6 +204,27 @@
             "2025-09-21": true
           }
         }
+      },
+
+      "challenges": {
+        "-O_lCtkbWsgFMGvSsKJf": {
+          "title": "30-Day Fitness Challenge",
+          "description": "Complete a workout every day for 30 days",
+          "progress": 5,
+          "goal": 30
+        },
+        "-O_lCtkbWsgFMGvSsKJg": {
+          "title": "Hydration Challenge",
+          "description": "Drink 8 glasses of water daily for a week",
+          "progress": 6,
+          "goal": 7
+        }
+      },
+
+      "streaks": {
+        "currentStreak": 12,
+        "longestStreak": 32,
+        "lastUpdated": "2025-09-21"
       }
     }
   }

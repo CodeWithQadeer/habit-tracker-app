@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { db } from "../utils/firebase";
-import { ref, onValue, push } from "firebase/database";
+import { ref, onValue, push, remove, update } from "firebase/database";
 
 const Challenges = () => {
   const { user } = useSelector((state) => state.auth);
@@ -37,9 +37,29 @@ const Challenges = () => {
         title: newChallenge,
         completed: false,
       });
-      setNewChallenge(""); // clear input
+      setNewChallenge("");
     } catch (error) {
       console.error("Error adding challenge:", error);
+    }
+  };
+
+  const toggleChallenge = async (id, completed) => {
+    if (!user?.uid) return;
+    try {
+      const challengeRef = ref(db, `users/${user.uid}/challenges/${id}`);
+      await update(challengeRef, { completed: !completed });
+    } catch (error) {
+      console.error("Error updating challenge:", error);
+    }
+  };
+
+  const deleteChallenge = async (id) => {
+    if (!user?.uid) return;
+    try {
+      const challengeRef = ref(db, `users/${user.uid}/challenges/${id}`);
+      await remove(challengeRef);
+    } catch (error) {
+      console.error("Error deleting challenge:", error);
     }
   };
 
@@ -74,9 +94,35 @@ const Challenges = () => {
           {challenges.map((challenge) => (
             <div
               key={challenge.id}
-              className="p-4 sm:p-5 rounded-xl bg-gradient-to-br from-indigo-600/30 to-purple-600/30 border border-indigo-500/40 shadow-lg text-gray-200 hover:scale-[1.02] sm:hover:scale-105 transition break-words"
+              className={`p-4 sm:p-5 rounded-xl flex justify-between items-center bg-gradient-to-br from-indigo-600/30 to-purple-600/30 border border-indigo-500/40 shadow-lg transition transform hover:scale-[1.02] sm:hover:scale-105 ${
+                challenge.completed ? "opacity-70 line-through" : ""
+              }`}
             >
-              {challenge.title}
+              <span className="text-gray-200 break-words max-w-[70%]">
+                {challenge.title}
+              </span>
+              <div className="flex gap-2">
+                {/* Toggle */}
+                <button
+                  onClick={() =>
+                    toggleChallenge(challenge.id, challenge.completed)
+                  }
+                  className={`px-2 py-1 rounded-md text-xs font-semibold ${
+                    challenge.completed
+                      ? "bg-green-600/70 text-white"
+                      : "bg-indigo-500/70 text-white"
+                  }`}
+                >
+                  {challenge.completed ? "Done" : "Mark"}
+                </button>
+                {/* Delete */}
+                <button
+                  onClick={() => deleteChallenge(challenge.id)}
+                  className="px-2 py-1 rounded-md text-xs bg-red-500/70 text-white hover:bg-red-600"
+                >
+                  ✕
+                </button>
+              </div>
             </div>
           ))}
         </div>

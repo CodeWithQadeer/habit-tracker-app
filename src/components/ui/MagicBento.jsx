@@ -1,58 +1,19 @@
 // src/components/ui/MagicBento.jsx
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, lazy, Suspense } from "react";
 import gsap from "gsap";
 
-// Import all homepage components
+// Import homepage components
 import Navbar from "../Navbar";
 import HeroSection from "../HeroSection";
 import AddHabitForm from "../AddHabitForm";
 import DailyHabits from "../DailyHabits";
-import ProgressCharts from "../ProgressCharts";
 import Streak from "../Streak";
 import Challenges from "../Challenges";
-import Achievements from "../Achievements";
 import Footer from "../Footer";
 
-// ---------------- Particle Card (Optional Bento Item) ----------------
-const ParticleCard = ({ title, description }) => {
-  const cardRef = useRef(null);
-
-  useEffect(() => {
-    const card = cardRef.current;
-    if (!card) return;
-
-    const createParticle = (e) => {
-      const particle = document.createElement("div");
-      particle.className = "particle";
-      card.appendChild(particle);
-
-      const rect = card.getBoundingClientRect();
-      particle.style.left = `${e.clientX - rect.left}px`;
-      particle.style.top = `${e.clientY - rect.top}px`;
-
-      gsap.to(particle, {
-        x: "random(-100,100)",
-        y: "random(-100,100)",
-        opacity: 0,
-        scale: 0,
-        duration: 1,
-        onComplete: () => particle.remove(),
-      });
-    };
-
-    card.addEventListener("mouseenter", createParticle);
-    return () => {
-      card.removeEventListener("mouseenter", createParticle);
-    };
-  }, []);
-
-  return (
-    <div ref={cardRef} className="particle-card">
-      <h3 className="title">{title}</h3>
-      <p className="description">{description}</p>
-    </div>
-  );
-};
+// Lazy load heavier components
+const ProgressCharts = lazy(() => import("../ProgressCharts"));
+const Achievements = lazy(() => import("../Achievements"));
 
 // ---------------- Global Spotlight Effect ----------------
 const GlobalSpotlight = () => {
@@ -81,13 +42,10 @@ const GlobalSpotlight = () => {
 const MagicBento = () => {
   return (
     <div className="magicbento-wrapper">
-      {/* Navbar */}
       <Navbar />
-
-      {/* Spotlight */}
       <GlobalSpotlight />
 
-      {/* Homepage Sections in Bento Layout */}
+      {/* Homepage Sections */}
       <div className="homepage-sections">
         <div className="section-card" id="hero">
           <HeroSection />
@@ -95,53 +53,57 @@ const MagicBento = () => {
         <div className="section-card" id="habits">
           <DailyHabits />
         </div>
-        <div className="section-card">
+        <div className="section-card" id="add-habit">
           <AddHabitForm />
         </div>
         <div className="section-card" id="progress">
-          <ProgressCharts />
+          <Suspense fallback={<div>Loading charts...</div>}>
+            <ProgressCharts />
+          </Suspense>
         </div>
-        <div className="section-card">
+        <div className="section-card" id="streak">
           <Streak />
         </div>
         <div className="section-card" id="achievements">
-          <Achievements />
+          <Suspense fallback={<div>Loading achievements...</div>}>
+            <Achievements />
+          </Suspense>
         </div>
-        <div className="section-card" id="achievements">
+        <div className="section-card" id="challenges">
           <Challenges />
         </div>
       </div>
 
       <Footer />
 
-      {/* Styling */}
+      {/* Styling (unchanged) */}
       <style jsx>{`
         .magicbento-wrapper {
           min-height: 100vh;
           background: #0a0a14;
-          padding: 1.5rem; /* reduced */
+          padding: 1.5rem; /* same as before */
         }
 
         .homepage-sections {
           margin-top: 2rem;
           display: flex;
           flex-direction: column;
-          gap: 1.25rem; /* tighter spacing */
+          gap: 1.25rem; /* same as before */
         }
 
         .section-card {
           background: linear-gradient(135deg, #1a1a2e, #2a003f);
-          border-radius: 16px; /* slightly smaller */
-          padding: 1 rem; /* reduced padding */
+          border-radius: 16px; /* unchanged */
+          /* no padding added here */
           box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5),
-            0 0 15px rgba(147, 51, 234, 0.4); /* softer glow */
+            0 0 15px rgba(147, 51, 234, 0.4);
           color: white;
         }
 
-        /* Responsive tweaks */
+        /* Desktop tweaks only */
         @media (min-width: 768px) {
           .section-card {
-            padding: 1.5rem; /* bigger on desktop */
+            padding: 1.5rem; /* only for desktop */
             border-radius: 20px;
           }
         }
@@ -163,19 +125,9 @@ const MagicBento = () => {
           filter: blur(80px);
           z-index: 0;
         }
-
-        /* Particle Effect */
-        .particle {
-          position: absolute;
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-          background: rgba(255, 255, 255, 0.9);
-          pointer-events: none;
-        }
       `}</style>
     </div>
   );
 };
 
-export default MagicBento;
+export default React.memo(MagicBento);

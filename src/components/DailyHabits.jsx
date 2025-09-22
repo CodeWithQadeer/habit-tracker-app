@@ -1,5 +1,4 @@
-// src/components/DailyHabits.jsx
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { db } from "../utils/firebase";
 import { ref, onValue } from "firebase/database";
@@ -12,9 +11,15 @@ import {
 const DailyHabits = () => {
   const { user } = useSelector((state) => state.auth);
   const [habits, setHabits] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+  // ✅ Fetch habits from Firebase
   useEffect(() => {
-    if (!user?.uid) return;
+    if (!user?.uid) {
+      setHabits([]);
+      setLoading(false);
+      return;
+    }
 
     requestNotificationPermission();
 
@@ -30,39 +35,47 @@ const DailyHabits = () => {
       } else {
         setHabits([]);
       }
+      setLoading(false);
     });
 
     return () => unsubscribe();
-  }, [user]);
+  }, [user?.uid]);
+
+  // ✅ Memoized reminders list
+  const reminders = useMemo(
+    () => habits.filter((h) => h.reminderTime),
+    [habits]
+  );
 
   // ✅ Reminder checker
   useEffect(() => {
-    if (habits.length === 0) return;
+    if (reminders.length === 0) return;
 
     const interval = setInterval(() => {
       const now = new Date();
-      const currentTime = `${String(now.getHours()).padStart(
-        2,
-        "0"
-      )}:${String(now.getMinutes()).padStart(2, "0")}`;
+      const currentTime = `${String(now.getHours()).padStart(2, "0")}:${String(
+        now.getMinutes()
+      ).padStart(2, "0")}`;
 
-      habits.forEach((habit) => {
+      reminders.forEach((habit) => {
         if (habit.reminderTime === currentTime) {
           showReminderNotification(habit.name);
         }
       });
-    }, 60000); // check every 1 min
+    }, 60000);
 
     return () => clearInterval(interval);
-  }, [habits]);
+  }, [reminders]);
 
-  // ✅ Group habits by category
-  const groupedHabits = habits.reduce((acc, habit) => {
-    const category = habit.category || "Uncategorized";
-    if (!acc[category]) acc[category] = [];
-    acc[category].push(habit);
-    return acc;
-  }, {});
+  // ✅ Group habits by category (memoized)
+  const groupedHabits = useMemo(() => {
+    return habits.reduce((acc, habit) => {
+      const category = habit.category || "Uncategorized";
+      if (!acc[category]) acc[category] = [];
+      acc[category].push(habit);
+      return acc;
+    }, {});
+  }, [habits]);
 
   return (
     <section className="relative my-6 mx-4 sm:mx-6 rounded-2xl overflow-hidden border border-violet-600/30 bg-gradient-to-br from-[#1a1a2e]/90 to-[#2a003f]/90 backdrop-blur-xl shadow-xl p-4 sm:p-6">
@@ -73,7 +86,14 @@ const DailyHabits = () => {
         📅 This Week’s Habits
       </h2>
 
-      {habits.length > 0 ? (
+      {/* Loading skeleton */}
+      {loading ? (
+        <div className="space-y-4 animate-pulse">
+          <div className="h-5 bg-gray-700/40 rounded w-1/3"></div>
+          <div className="h-20 bg-gray-700/30 rounded"></div>
+          <div className="h-20 bg-gray-700/30 rounded"></div>
+        </div>
+      ) : habits.length > 0 ? (
         <div className="space-y-6">
           {Object.entries(groupedHabits).map(([category, habitsInCategory]) => (
             <div key={category}>
@@ -90,8 +110,8 @@ const DailyHabits = () => {
           ))}
         </div>
       ) : (
-        <p className="text-gray-300 italic text-sm sm:text-base">
-          No habits added yet. Start tracking!
+        <p className="text-gray-400 italic text-sm sm:text-base text-center py-6">
+          No habits added yet. Start tracking your first habit 🚀
         </p>
       )}
     </section>

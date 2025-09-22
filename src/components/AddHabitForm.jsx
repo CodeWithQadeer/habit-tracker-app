@@ -23,7 +23,6 @@ const AddHabitForm = () => {
     e.preventDefault();
     if (!user?.uid || !name) return;
 
-    // Use custom category if "Custom" is selected
     const finalCategory =
       category === "Custom" && customCategory ? customCategory : category;
 
@@ -39,7 +38,6 @@ const AddHabitForm = () => {
       reminderTime,
     });
 
-    // reset form
     setName("");
     setCategory(predefinedCategories[0]);
     setCustomCategory("");
@@ -63,25 +61,23 @@ const AddHabitForm = () => {
 
       <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
         {/* Habit Name */}
-        <div>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Habit name"
-            className="w-full px-3 sm:px-4 py-2 rounded-xl bg-white/90 text-gray-800 
-                       placeholder-gray-500 focus:outline-none 
-                       focus:ring-2 focus:ring-pink-400 shadow text-sm sm:text-base"
-            required
-          />
-        </div>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Habit name"
+          className="w-full px-3 sm:px-4 h-11 rounded-xl bg-white/90 text-gray-800 
+                     placeholder-gray-500 focus:outline-none 
+                     focus:ring-2 focus:ring-pink-400 shadow text-sm sm:text-base"
+          required
+        />
 
         {/* Category */}
         <div>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full px-3 sm:px-4 py-2 rounded-xl bg-white/90 text-gray-800 
+            className="w-full px-3 sm:px-4 h-11 rounded-xl bg-white/90 text-gray-800 
                        focus:outline-none focus:ring-2 focus:ring-pink-400 shadow text-sm sm:text-base"
           >
             {predefinedCategories.map((cat) => (
@@ -92,14 +88,14 @@ const AddHabitForm = () => {
             <option value="Custom">➕ Custom</option>
           </select>
 
-          {/* Show input for custom category */}
+          {/* Custom category input */}
           {category === "Custom" && (
             <input
               type="text"
               value={customCategory}
               onChange={(e) => setCustomCategory(e.target.value)}
               placeholder="Enter custom category"
-              className="mt-2 w-full px-3 sm:px-4 py-2 rounded-xl bg-white/90 text-gray-800 
+              className="mt-2 w-full px-3 sm:px-4 h-11 rounded-xl bg-white/90 text-gray-800 
                          placeholder-gray-500 focus:outline-none 
                          focus:ring-2 focus:ring-pink-400 shadow text-sm sm:text-base"
               required
@@ -108,18 +104,16 @@ const AddHabitForm = () => {
         </div>
 
         {/* Difficulty */}
-        <div>
-          <select
-            value={difficulty}
-            onChange={(e) => setDifficulty(e.target.value)}
-            className="w-full px-3 sm:px-4 py-2 rounded-xl bg-white/90 text-gray-800 
-                       focus:outline-none focus:ring-2 focus:ring-pink-400 shadow text-sm sm:text-base"
-          >
-            <option value="Easy">Easy</option>
-            <option value="Moderate">Moderate</option>
-            <option value="Hard">Hard</option>
-          </select>
-        </div>
+        <select
+          value={difficulty}
+          onChange={(e) => setDifficulty(e.target.value)}
+          className="w-full px-3 sm:px-4 h-11 rounded-xl bg-white/90 text-gray-800 
+                     focus:outline-none focus:ring-2 focus:ring-pink-400 shadow text-sm sm:text-base"
+        >
+          <option value="Easy">Easy</option>
+          <option value="Moderate">Moderate</option>
+          <option value="Hard">Hard</option>
+        </select>
 
         {/* Reminder */}
         <div>
@@ -130,16 +124,16 @@ const AddHabitForm = () => {
             type="time"
             value={reminderTime}
             onChange={(e) => setReminderTime(e.target.value)}
-            className="w-full px-3 sm:px-4 py-2 rounded-xl bg-white/90 text-gray-800 
-                       focus:outline-none focus:ring-2 focus:ring-pink-400 shadow text-sm sm:text-base"
+            className="w-full px-3 sm:px-4 h-11 rounded-xl bg-white/90 text-gray-800 
+                       focus:outline-none focus:ring-2 focus:ring-pink-400 shadow text-sm sm:text-base appearance-none"
           />
         </div>
 
         {/* Button */}
         <button
           type="submit"
-          className="w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 
-                     text-white font-semibold px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl shadow-md 
+          className="w-full h-11 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 
+                     text-white font-semibold rounded-xl shadow-md 
                      hover:opacity-90 transition duration-200 text-sm sm:text-base"
         >
           ➕ Add Habit
