@@ -24,11 +24,9 @@ const LandingPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  //  Demo login handler
+  // ✅ Demo login handler
   const handleDemoLogin = () => {
-    dispatch(
-      loginUser({ email: "username@example.com", password: "123456" })
-    )
+    dispatch(loginUser({ email: "username@example.com", password: "123456" }))
       .unwrap()
       .then(() => {
         navigate("/homepage"); // redirect after success
@@ -47,7 +45,9 @@ const LandingPage = () => {
       {/* --- App Logo --- */}
       <div className="absolute top-4 sm:top-6 left-4 sm:left-6 flex items-center gap-2 z-20">
         <Orbit className="w-6 h-6 sm:w-8 sm:h-8 text-pink-400 drop-shadow-md animate-spin-slow" />
-        <span className="text-xl sm:text-2xl font-bold tracking-wide">Orbit</span>
+        <span className="text-xl sm:text-2xl font-bold tracking-wide">
+          Orbit
+        </span>
       </div>
 
       {/* Decorative icons */}
@@ -92,34 +92,38 @@ const LandingPage = () => {
       </div>
 
       {/* Buttons */}
-      <div className="mt-10 sm:mt-12 flex flex-col sm:flex-row gap-4 sm:gap-6 relative z-10 justify-center items-center">
-        <Link
-          to="/login"
-          className="flex items-center gap-2 px-6 py-2 sm:px-8 sm:py-3 rounded-2xl font-semibold shadow-lg
-          bg-white/10 backdrop-blur-md border border-white/20 
-          hover:bg-white/20 hover:scale-105 transition text-sm sm:text-base"
-        >
-          <LogIn size={18} /> Login
-        </Link>
-        <Link
-          to="/signup"
-          className="flex items-center gap-2 px-6 py-2 sm:px-8 sm:py-3 rounded-2xl font-semibold shadow-lg
-          bg-gradient-to-r from-indigo-700 to-purple-800 text-white 
-          border border-indigo-400/40 
-          hover:scale-105 hover:brightness-110 transition text-sm sm:text-base"
-        >
-          <UserPlus size={18} /> Sign Up
-        </Link>
+      <div className="mt-10 sm:mt-12 flex flex-col sm:flex-row gap-3 sm:gap-6 relative z-10 w-full max-w-xs sm:max-w-none justify-center items-center">
+        {/* Top row: Login + Sign Up (side by side on mobile) */}
+        <div className="flex w-full sm:w-auto gap-3 sm:gap-6">
+          <Link
+            to="/login"
+            className="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-6 py-3 rounded-2xl font-semibold shadow-lg
+      bg-white/10 backdrop-blur-md border border-white/20 
+      hover:bg-white/20 hover:scale-105 transition text-sm sm:text-base"
+          >
+            <LogIn size={18} /> Login
+          </Link>
 
-        {/* ✅ Demo Account Button */ }
+          <Link
+            to="/signup"
+            className="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-6 py-3 rounded-2xl font-semibold shadow-lg
+      bg-gradient-to-r from-indigo-700 to-purple-800 text-white 
+      border border-indigo-400/40 
+      hover:scale-105 hover:brightness-110 transition text-sm sm:text-base"
+          >
+            <UserPlus size={18} /> Sign Up
+          </Link>
+        </div>
+
+        {/* Demo Account (below on mobile, inline on desktop) */}
         <button
           onClick={handleDemoLogin}
-          className="flex items-center gap-2 px-6 py-2 sm:px-8 sm:py-3 rounded-2xl font-semibold shadow-lg
-          bg-gradient-to-r from-pink-500 to-red-500 text-white 
-          border border-pink-400/40 
-          hover:scale-105 hover:brightness-110 transition text-sm sm:text-base"
+          className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 rounded-2xl font-semibold shadow-lg
+    bg-gradient-to-r from-pink-500 to-red-500 text-white 
+    border border-pink-400/40 
+    hover:scale-105 hover:brightness-110 transition text-sm sm:text-base"
         >
-          <Beaker size={18} /> Try Demo Mode
+          <Beaker size={18} /> Try Demo
         </button>
       </div>
 
