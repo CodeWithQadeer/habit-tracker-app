@@ -13,7 +13,7 @@ const DailyHabits = () => {
   const [habits, setHabits] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Fetch habits from Firebase
+  // Fetch habits from Firebase
   useEffect(() => {
     if (!user?.uid) {
       setHabits([]);
@@ -41,13 +41,13 @@ const DailyHabits = () => {
     return () => unsubscribe();
   }, [user?.uid]);
 
-  // ✅ Memoized reminders list
+  // Memoized reminders list
   const reminders = useMemo(
     () => habits.filter((h) => h.reminderTime),
     [habits]
   );
 
-  // ✅ Reminder checker
+  // Reminder checker
   useEffect(() => {
     if (reminders.length === 0) return;
 
@@ -67,7 +67,7 @@ const DailyHabits = () => {
     return () => clearInterval(interval);
   }, [reminders]);
 
-  // ✅ Group habits by category (memoized)
+  // Group habits by category (memoized)
   const groupedHabits = useMemo(() => {
     return habits.reduce((acc, habit) => {
       const category = habit.category || "Uncategorized";

@@ -1,12 +1,12 @@
 // src/components/HeroSection.jsx
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { db } from "../utils/firebase";
 import { ref, onValue } from "firebase/database";
 
 const toISODate = (date) => new Date(date).toLocaleDateString("en-CA");
 
-// 🔹 Helper: calculate streak
+//calculate streak
 const calculateStreak = (habits) => {
   let maxStreak = 0;
   habits.forEach((h) => {
@@ -42,12 +42,12 @@ const HeroSection = () => {
   const [greeting, setGreeting] = useState("Hello");
   const [loading, setLoading] = useState(true);
 
-  // Greeting (runs once)
+  // Greeting 
   useEffect(() => {
     const hours = new Date().getHours();
     if (hours >= 5 && hours < 12) setGreeting("Good Morning");
     else if (hours >= 12 && hours < 17) setGreeting("Good Afternoon");
-    else if (hours >= 17 && hours < 21) setGreeting("Good Evening");
+    else if (hours >= 17 && hours < 23) setGreeting("Good Evening");
     else setGreeting("Good Night");
   }, []);
 
@@ -118,7 +118,7 @@ const HeroSection = () => {
   );
 };
 
-// 🔹 Reusable Stat Card
+// Reusable Stat Card
 const StatCard = ({ label, value, color }) => (
   <div
     className={`p-4 sm:p-5 rounded-xl bg-gradient-to-br from-${color}-600/30 to-${color}-800/30 border border-${color}-500/40 shadow-lg hover:scale-[1.02] sm:hover:scale-105 transition`}

@@ -23,8 +23,8 @@ function Login() {
   const navigate = useNavigate();
   const { user, loading, error } = useSelector((state) => state.auth);
 
-  const [email, setEmail] = useState("username@example.com");
-  const [password, setPassword] = useState("123456");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [formError, setFormError] = useState("");
 
   const isMobile = useIsMobile();

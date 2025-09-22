@@ -1,4 +1,3 @@
-// src/components/Navbar.jsx
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../features/auth/authSlice";
 import { auth, db } from "../utils/firebase";

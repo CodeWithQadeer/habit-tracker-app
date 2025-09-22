@@ -2,9 +2,9 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { db } from "../utils/firebase";
 import { ref, onValue, set, remove } from "firebase/database";
-import { Trash2, CheckCircle } from "lucide-react";
+import { Trash2, CheckCircle,Ban } from "lucide-react";
 
-// 🔹 Utils
+// Utils
 const toISODate = (date) => new Date(date).toLocaleDateString("en-CA");
 
 const getWeekDays = () => {
@@ -25,8 +25,7 @@ const getWeekDays = () => {
 const showReminderNotification = (habitName) => {
   if ("Notification" in window && Notification.permission === "granted") {
     new Notification("Habit Reminder", {
-      body: `⏰ Time to do: ${habitName}`,
-      icon: "/icon.png",
+      body: `⏰ Time to do: ${habitName}`
     });
   }
 };
@@ -35,10 +34,10 @@ const HabitCard = ({ habit }) => {
   const { user } = useSelector((state) => state.auth);
   const [history, setHistory] = useState({});
 
-  // 🔹 Memoized week days
+  // Memoized week days
   const weekDays = useMemo(() => getWeekDays(), []);
 
-  // 🔹 Fetch history from Firebase
+  // Fetch history from Firebase
   useEffect(() => {
     if (!user?.uid || !habit?.id) return;
 
@@ -50,7 +49,7 @@ const HabitCard = ({ habit }) => {
     return () => unsubscribe();
   }, [user?.uid, habit?.id]);
 
-  // 🔹 Toggle habit completion
+  // Toggle habit completion
   const toggleToday = useCallback(
     async (dayStr, checked) => {
       if (!user?.uid) return;
@@ -63,13 +62,13 @@ const HabitCard = ({ habit }) => {
     [user?.uid, habit?.id]
   );
 
-  // 🔹 Delete habit
+  // Delete habit
   const deleteHabit = useCallback(async () => {
     if (!user?.uid) return;
     await remove(ref(db, `users/${user.uid}/habits/${habit.id}`));
   }, [user?.uid, habit?.id]);
 
-  // 🔹 Reminder check
+  //  Reminder check
   useEffect(() => {
     if (!habit?.reminderTime) return;
 
@@ -103,7 +102,7 @@ const HabitCard = ({ habit }) => {
         </div>
         <button
           onClick={(e) => {
-            e.stopPropagation(); // ✅ prevents bubbling
+            e.stopPropagation(); //  prevents bubbling
             deleteHabit();
           }}
           className="shrink-0 text-pink-400 hover:text-pink-300 active:scale-90 transition"
@@ -118,7 +117,7 @@ const HabitCard = ({ habit }) => {
         ⏰ Reminder: {habit.reminderTime || "None"}
       </p>
 
-      {/* ✅ Week View */}
+      {/* Week View */}
       <div className="grid grid-cols-7 gap-2 sm:gap-4 mt-3 w-full">
         {weekDays.map((day) => {
           const completed = history[day.date];
@@ -146,7 +145,7 @@ const HabitCard = ({ habit }) => {
               ) : completed ? (
                 <CheckCircle className="text-green-400 w-4 h-4 sm:w-5 sm:h-5" />
               ) : (
-                <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full border border-gray-600 opacity-40"></div>
+                <Ban className="w-4 h-4 sm:w-5 sm:h-5 text-red-400 rounded-full border border-gray-600 opacity-40"/>
               )}
             </div>
           );
