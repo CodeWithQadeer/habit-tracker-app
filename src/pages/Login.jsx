@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../features/auth/authSlice";
-import { resetHabitsOnLogin } from "../features/habits/habitsSlice";
+import { loginUser, setUser } from "../features/auth/authSlice";
+import { resetHabitsOnLogin, setHabits } from "../features/habits/habitsSlice";
 import { Link, useNavigate } from "react-router-dom";
-// import SplashCursor from "../components/ui/SplashCursor";
-import { Orbit, Star, Sparkles } from "lucide-react";
+import { Orbit, Star, Sparkles, Beaker } from "lucide-react";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
+
+const auth = getAuth();
+const db = getFirestore();
 
 // Hook to detect mobile
 const useIsMobile = () => {
@@ -44,6 +48,44 @@ function Login() {
     dispatch(loginUser({ email, password }));
   };
 
+  // Handle Demo Mode login
+  const handleDemoMode = async () => {
+    try {
+      const demoEmail = "username@example.com"; // your demo email
+      const demoPassword = "123456"; // your demo password
+
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        demoEmail,
+        demoPassword
+      );
+      const demoUser = userCredential.user;
+
+      // Fetch demo habits
+      const habitsRef = collection(db, "users", demoUser.uid, "habits");
+      const snapshot = await getDocs(habitsRef);
+      const habits = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      dispatch(
+        setUser({
+          uid: demoUser.uid,
+          email: demoUser.email,
+          username: "Demo User",
+          isDemo: true,
+        })
+      );
+      dispatch(setHabits(habits));
+
+      navigate("/homepage");
+    } catch (err) {
+      console.error("Demo mode login failed:", err.message);
+      alert("Demo mode is unavailable right now. Please try again later.");
+    }
+  };
+
   // Redirect after login
   useEffect(() => {
     if (user) {
@@ -54,19 +96,18 @@ function Login() {
 
   return (
     <div className="relative min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-[#1a1a2e] via-[#2a003f] to-[#3d0066] text-white px-4 sm:px-6 overflow-hidden">
-      {/* ✨ Only show SplashCursor on desktop */}
-      {/* {!isMobile && <SplashCursor />} */}
-
-      {/* Glow background */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-pink-500/20 blur-3xl opacity-70" />
-
       {/* --- App Logo --- */}
-      <div className="absolute top-4 sm:top-6 left-4 sm:left-6 flex items-center gap-2 z-20">
+      <div
+        onClick={() => navigate("/")}
+        className="absolute top-4 sm:top-6 left-4 sm:left-6 flex items-center gap-2 z-20 cursor-pointer"
+      >
         <Orbit className="w-6 h-6 sm:w-8 sm:h-8 text-pink-400 drop-shadow-md animate-spin-slow" />
-        <span className="text-xl sm:text-2xl font-bold tracking-wide">Orbit</span>
+        <span className="text-xl sm:text-2xl font-bold tracking-wide">
+          Orbit
+        </span>
       </div>
 
-      {/* Decorative icons (skip on mobile for performance) */}
+      {/* Decorative icons */}
       {!isMobile && (
         <>
           <Star className="absolute bottom-16 right-8 sm:right-14 w-8 sm:w-10 h-8 sm:h-10 text-yellow-200/30 animate-pulse" />
@@ -76,14 +117,13 @@ function Login() {
         </>
       )}
 
-      {/* 🌟 Glassy Login Card */}
+      {/* Login Card */}
       <div className="relative backdrop-blur-xl bg-white/80 border border-white/30 text-gray-900 shadow-2xl rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 w-full max-w-sm sm:max-w-md transition duration-500 hover:shadow-pink-400/30">
         <h2 className="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-indigo-500 to-pink-500 bg-clip-text text-transparent text-center mb-6 sm:mb-8">
           Log In
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
-          {/* Email */}
           <input
             type="email"
             placeholder="Email"
@@ -93,8 +133,6 @@ function Login() {
             className="w-full px-4 py-3 rounded-full bg-white/95 border border-gray-300 placeholder-gray-500 text-gray-900 focus:ring-2 focus:ring-pink-400 focus:border-pink-400 outline-none transition duration-300 text-sm sm:text-base"
             required
           />
-
-          {/* Password */}
           <input
             type="password"
             placeholder="Password"
@@ -105,18 +143,12 @@ function Login() {
             required
           />
 
-          {/* 🚨 Errors */}
           {(formError || error) && (
-            <div
-              className="text-red-500 text-xs sm:text-sm text-center"
-              role="alert"
-              aria-live="assertive"
-            >
+            <div className="text-red-500 text-xs sm:text-sm text-center">
               {formError || error}
             </div>
           )}
 
-          {/* 🚀 Login Button */}
           <button
             type="submit"
             disabled={loading}
@@ -133,7 +165,15 @@ function Login() {
           </button>
         </form>
 
-        {/* 🆕 Signup Redirect */}
+        {/* 🧪 Demo Mode Button */}
+        <button
+          onClick={handleDemoMode}
+          className="mt-4 w-full flex items-center justify-center gap-2 bg-gradient-to-r from-pink-500 to-red-500 hover:from-red-500 hover:to-pink-500 text-white font-semibold py-2.5 sm:py-3 rounded-full shadow-lg transition duration-300 text-sm sm:text-base"
+        >
+          <Beaker size={18} /> Try Demo Mode
+        </button>
+
+        {/* Signup Redirect */}
         <p className="text-center text-gray-700 mt-5 sm:mt-6 text-sm sm:text-base">
           New user?{" "}
           <Link
