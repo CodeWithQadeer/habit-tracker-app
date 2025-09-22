@@ -1,0 +1,99 @@
+// src/pages/LandingPage.jsx
+import { Link } from "react-router-dom";
+import { LogIn, UserPlus, Orbit, Star, Sparkles } from "lucide-react";
+import SplashCursor from "../components/ui/SplashCursor";
+import DecryptedText from "../components/ui/DecryptedText";
+import RotatingText from "@/components/ui/RotatingText";
+
+const LandingPage = () => {
+  return (
+    <div className="relative min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-[#1a1a2e] via-[#2a003f] to-[#3d0066] text-white px-4 sm:px-6 overflow-hidden">
+      <SplashCursor />
+
+      {/* Glow background */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-pink-500/20 blur-3xl opacity-70" />
+
+      {/* --- App Logo --- */}
+      <div className="absolute top-4 sm:top-6 left-4 sm:left-6 flex items-center gap-2 z-20">
+        <Orbit className="w-6 h-6 sm:w-8 sm:h-8 text-pink-400 drop-shadow-md animate-spin-slow" />
+        <span className="text-xl sm:text-2xl font-bold tracking-wide">Orbit</span>
+      </div>
+
+      {/* Decorative icons */}
+      <Star className="absolute bottom-16 right-8 sm:right-14 w-8 sm:w-10 h-8 sm:h-10 text-yellow-200/30 animate-pulse" />
+      <Sparkles className="absolute top-1/3 right-1/6 sm:right-1/4 w-6 sm:w-8 h-6 sm:h-8 text-white/25 animate-bounce" />
+      <Star className="absolute top-10 right-6 sm:right-10 w-4 sm:w-6 h-4 sm:h-6 text-pink-300/40 animate-ping" />
+      <Star className="absolute top-1/4 left-6 sm:left-10 w-4 sm:w-5 h-4 sm:h-5 text-indigo-300/30 animate-pulse" />
+      <Star className="absolute bottom-1/4 left-1/4 sm:left-1/3 w-3 sm:w-4 h-3 sm:h-4 text-purple-300/40 animate-bounce" />
+      <Sparkles className="absolute top-2/3 right-1/4 sm:right-1/3 w-4 sm:w-5 h-4 sm:h-5 text-white/30 animate-pulse" />
+      <Star className="absolute bottom-8 sm:bottom-10 left-8 sm:left-14 w-4 sm:w-6 h-4 sm:h-6 text-yellow-200/20 animate-ping" />
+
+      <div className="text-center max-w-2xl sm:max-w-3xl relative z-10">
+        {/* Heading */}
+        <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold drop-shadow-lg leading-snug">
+          <div className="mt-20 flex items-center gap-2 sm:gap-3 justify-center">
+            <Orbit className="w-8 h-8 sm:w-10 sm:h-10 text-pink-300 animate-spin-slow" />
+            <DecryptedText
+              text={`Stay in your Orbit,\nBuild better habits`}
+              animateOn="view"
+              revealDirection="center"
+            />
+            <Sparkles className="w-5 sm:w-7 h-5 sm:h-7 text-yellow-200 animate-pulse" />
+          </div>
+        </h1>
+
+        {/* Rotating text */}
+        <div className="mt-4 sm:mt-6">
+          <RotatingText
+            texts={["Stay consistent", "Stay motivated", "Track your progress"]}
+            mainClassName="px-3 sm:px-4 bg-gradient-to-l from-indigo-500 via-purple-500 to-pink-500 text-white font-semibold overflow-hidden py-1 md:py-2 justify-center rounded-lg shadow-lg text-sm sm:text-base"
+            staggerFrom="last"
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: "-120%" }}
+            staggerDuration={0.025}
+            splitLevelClassName="overflow-hidden pb-1"
+            transition={{ type: "spring", damping: 30, stiffness: 400 }}
+            rotationInterval={2000}
+          />
+        </div>
+      </div>
+
+      {/* Buttons */}
+{/* Buttons */}
+<div className="mt-10 sm:mt-12 flex flex-col sm:flex-row gap-4 sm:gap-6 relative z-10 justify-center items-center">
+  <Link
+    to="/login"
+    className="flex items-center gap-2 px-6 py-2 sm:px-8 sm:py-3 rounded-2xl font-semibold shadow-lg
+    bg-white/10 backdrop-blur-md border border-white/20 
+    hover:bg-white/20 hover:scale-105 transition text-sm sm:text-base"
+  >
+    <LogIn size={18} /> Login
+  </Link>
+  <Link
+    to="/signup"
+    className="flex items-center gap-2 px-6 py-2 sm:px-8 sm:py-3 rounded-2xl font-semibold shadow-lg
+    bg-gradient-to-r from-indigo-700 to-purple-800 text-white 
+    border border-indigo-400/40 
+    hover:scale-105 hover:brightness-110 transition text-sm sm:text-base"
+  >
+    <UserPlus size={18} /> Sign Up
+  </Link>
+</div>
+
+
+      {/* Small text */}
+      <div className="mt-8 sm:mt-10 text-xs sm:text-sm text-gray-300 relative z-10">
+        New here?{" "}
+        <Link
+          to="/signup"
+          className="underline font-medium hover:text-white transition-colors"
+        >
+          Create an account
+        </Link>
+      </div>
+    </div>
+  );
+};
+
+export default LandingPage;
