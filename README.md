@@ -139,8 +139,7 @@ Built with ❤️ by Syed Abdul Qadeer
 Currently pursuing Full-Stack Web Development @ Masai School
 #dailylearning #masaiverse
 
-🔖 Tags
-React · Redux Toolkit · Firebase · TailwindCSS · GSAP · Full-Stack Development · Vercel · Web App · Habit Tracker · Productivity · Portfolio Project
+React · Redux Toolkit · Firebase · TailwindCSS · Full-Stack Development · Vercel · Web App · Habit Tracker · Productivity · Portfolio Project
 ---
 
 
