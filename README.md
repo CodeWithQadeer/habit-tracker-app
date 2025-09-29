@@ -1,61 +1,67 @@
-# 🌌 Orbit – Habit Tracker App
+🌌 Orbit – Habit Tracker App
 
-Orbit is a **modern habit tracking web application** designed to help users build consistency and achieve personal growth.  
-It combines **daily tracking, progress visualization, challenges, and streaks** with a sleek and optimized UI.  
+Live Demo 🚀
 
-This project also highlights **full-stack development skills** using **React, Redux Toolkit, Firebase, and advanced UI/UX principles**, making it both a **portfolio-ready project** and a **practical app** for daily use.
+Orbit is a modern habit tracking web application built to help users stay consistent and achieve personal growth.
+It combines daily habit tracking, progress visualization, challenges, and streaks with a sleek, optimized UI.
 
----
+This project also demonstrates full-stack development skills using React, Redux Toolkit, Firebase, and advanced UI/UX principles, making it both a portfolio-ready showcase and a practical tool for daily use.
 
-## ✨ Features
+✨ Features
 
-- 📅 **Daily Habit Reset** – Automatically resets habits every day at login.  
-- ✅ **Habit Completion** – Mark habits as completed with one click.  
-- 📊 **Progress Charts & Streaks** – Track performance and visualize progress.  
-- 🎯 **Challenges & Motivation** – Stay on track with challenges and streaks.  
-- ⚡ **Optimized Performance** – Batched Firestore writes, reduced re-renders.  
-- 🌓 **Light/Dark Mode** – Smooth theme switching for better UX.  
-- 🎨 **Modern UI/UX** – Responsive, animated, and mobile-first design.  
-- 🔥 **Realtime Sync** – Firebase Firestore keeps everything live.  
+📅 Daily Habit Reset – Automatically resets habits at login each day.
 
----
+✅ Habit Completion – Mark habits as completed with a single click.
 
-## 🛠️ Tech Stack
+📊 Progress Charts & Streaks – Visualize your growth and track streaks.
 
-### Frontend
-- **React 18** – UI library  
-- **Redux Toolkit** – State management with async thunks  
-- **TailwindCSS** – Modern utility-first styling  
-- **GSAP + Particle Effects** – Animations  
+🎯 Challenges & Motivation – Stay engaged with challenges and streak milestones.
 
-### Backend / Database
-- **Firebase Firestore** – Realtime NoSQL database  
-- **Firebase Authentication** – Secure user management  
+⚡ Optimized Performance – Batched Firestore writes & reduced re-renders.
 
-### Deployment
-- **Vercel** – Fast, serverless deployment  
+🌓 Light/Dark Mode – Smooth theme switching for a better user experience.
 
----
+🎨 Modern UI/UX – Responsive, animated, and mobile-first design.
 
-## 🚀 Getting Started
+🔥 Realtime Sync – Firebase Firestore ensures live updates.
 
-### 1. Clone the Repository
-```bash
+🛠️ Tech Stack
+Frontend
+
+React 18 – UI library
+
+Redux Toolkit – State management with async thunks
+
+TailwindCSS – Utility-first styling
+
+GSAP + Particle Effects – Smooth animations
+
+Backend / Database
+
+Firebase Firestore – Realtime NoSQL database
+
+Firebase Authentication – Secure user authentication
+
+Deployment
+
+Vercel – Serverless deployment with CI/CD
+
+🚀 Getting Started
+1. Clone the Repository
 git clone https://github.com/your-username/orbit-habit-tracker.git
 cd orbit-habit-tracker
+
 2. Install Dependencies
-bash
-Copy code
 npm install
+
 3. Setup Firebase
+
 Create a project in Firebase Console.
 
 Enable Authentication and Firestore Database.
 
 Add your Firebase config in src/firebase.js:
 
-js
-Copy code
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
@@ -72,15 +78,15 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
+
 4. Run the App
-bash
-Copy code
 npm run dev
-Open http://localhost:5173 in your browser.
+
+
+Open http://localhost:5173
+ in your browser.
 
 📂 Project Structure
-php
-Copy code
 orbit-habit-tracker/
 ├── src/
 │   ├── components/       # UI components (Navbar, Footer, etc.)
@@ -93,18 +99,21 @@ orbit-habit-tracker/
 ├── public/               # Static assets
 ├── package.json
 └── README.md
-📈 Optimizations
-Performance: Batched writes to Firestore instead of multiple updateDoc calls.
 
-Code Quality: Extracted reusable utils (like getToday()).
+📈 Optimizations
+
+Performance: Batched Firestore writes instead of multiple updateDoc calls.
+
+Code Quality: Extracted reusable utilities (e.g., getToday()).
 
 State Management: Normalized Redux state for O(1) habit lookups.
 
-UI/UX: Reduced whitespace, optimized mobile-first layout.
+UI/UX: Optimized for mobile-first layout with smooth animations.
 
-Error Handling: Used rejectWithValue in thunks for cleaner error states.
+Error Handling: Used rejectWithValue in thunks for clean error states.
 
 🌐 Deployment
+
 Push your repo to GitHub.
 
 Connect it with Vercel.
@@ -113,21 +122,18 @@ Add Firebase config as environment variables in Vercel.
 
 Deploy and share your live app! 🚀
 
-Example:
-
-Home Page
-
-Habit Dashboard
-
-Progress Charts
+👉 Live Demo Here
 
 🤝 Contributing
-Want to improve Orbit? Feel free to fork the repo and create pull requests.
+
+Contributions are welcome! Fork the repo, make improvements, and open a pull request.
 
 📜 License
+
 This project is licensed under the MIT License.
 
 👨‍💻 Author
+
 Built with ❤️ by Syed Abdul Qadeer
-Currently learning Full-Stack Web Development @ Masai School.
+Currently pursuing Full-Stack Web Development @ Masai School
 #dailylearning #masaiverse
