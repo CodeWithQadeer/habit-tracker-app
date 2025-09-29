@@ -34,7 +34,6 @@ This project also demonstrates **full-stack development skills** using **React, 
 - **React 18** – UI library  
 - **Redux Toolkit** – State management with async thunks  
 - **TailwindCSS** – Utility-first styling  
-- **GSAP + Particle Effects** – Smooth animations  
 
 ### Backend / Database  
 - **Firebase Firestore** – Realtime NoSQL database  
