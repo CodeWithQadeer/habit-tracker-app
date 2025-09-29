@@ -54,13 +54,15 @@ cd orbit-habit-tracker
 cli
 Copy code
 npm install
-3. Setup Firebase
+```
+### 3. Setup Firebase
+
 Create a project in Firebase Console.
 
 Enable Authentication and Firestore Database.
 
 Add your Firebase config in src/firebase.js:
-
+```
 js
 Copy code
 import { initializeApp } from "firebase/app";
@@ -79,12 +81,16 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
+```
 4. Run the App
+```
 cli
 npm run dev
 Open http://localhost:5173 in your browser.
+```
 
 📂 Project Structure
+```
 orbit-habit-tracker/
 ├── src/
 │   ├── components/       # UI components (Navbar, Footer, etc.)
@@ -97,7 +103,9 @@ orbit-habit-tracker/
 ├── public/               # Static assets
 ├── package.json
 └── README.md
+```
 📈 Optimizations
+```
 Performance: Batched Firestore writes instead of multiple updateDoc calls.
 
 Code Quality: Extracted reusable utilities (e.g., getToday()).
@@ -107,8 +115,10 @@ State Management: Normalized Redux state for O(1) habit lookups.
 UI/UX: Optimized for mobile-first layout with smooth animations.
 
 Error Handling: Used rejectWithValue in thunks for clean error states.
+```
 
 🌐 Deployment
+```
 Push your repo to GitHub.
 
 Connect it with Vercel.
@@ -116,6 +126,7 @@ Connect it with Vercel.
 Add Firebase config as environment variables in Vercel.
 
 Deploy and share your live app! 🚀
+```
 
 🤝 Contributing
 Contributions are welcome! Fork the repo, make improvements, and open a pull request.
