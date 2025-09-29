@@ -48,11 +48,11 @@ This project also demonstrates **full-stack development skills** using **React, 
 ## 🚀 Getting Started  
 
 ### 1. Clone the Repository  
-```bash
+```cli
 git clone https://github.com/your-username/orbit-habit-tracker.git
 cd orbit-habit-tracker
 2. Install Dependencies
-bash
+cli
 Copy code
 npm install
 3. Setup Firebase
@@ -81,14 +81,11 @@ const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
 4. Run the App
-bash
-Copy code
+cli
 npm run dev
 Open http://localhost:5173 in your browser.
 
 📂 Project Structure
-php
-Copy code
 orbit-habit-tracker/
 ├── src/
 │   ├── components/       # UI components (Navbar, Footer, etc.)
@@ -121,8 +118,6 @@ Add Firebase config as environment variables in Vercel.
 
 Deploy and share your live app! 🚀
 
-👉 Live Demo Here
-
 🤝 Contributing
 Contributions are welcome! Fork the repo, make improvements, and open a pull request.
 
@@ -136,15 +131,9 @@ Currently pursuing Full-Stack Web Development @ Masai School
 
 🔖 Tags
 React · Redux Toolkit · Firebase · TailwindCSS · GSAP · Full-Stack Development · Vercel · Web App · Habit Tracker · Productivity · Portfolio Project
-
-yaml
-Copy code
-
 ---
 
-✅ Now your README has:  
-- **Badges** for React, Redux, Firebase, TailwindCSS, and Vercel  
-- **Deployed link** at the top and in Deployment section  
-- **Relevant tags** for GitHub search  
 
-Do you also want me to **add preview screenshots placeholders** (like Home Page, Dashboard, Pr
+
+
+
