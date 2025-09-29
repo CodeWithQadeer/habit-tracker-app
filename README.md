@@ -1,67 +1,69 @@
-🌌 Orbit – Habit Tracker App
+# 🌌 Orbit – Habit Tracker App  
 
-Live Demo 🚀
+[![React](https://img.shields.io/badge/React-18-blue?logo=react)](https://react.dev/)  
+[![Redux Toolkit](https://img.shields.io/badge/Redux%20Toolkit-RTK-purple?logo=redux)](https://redux-toolkit.js.org/)  
+[![Firebase](https://img.shields.io/badge/Firebase-Backend-orange?logo=firebase)](https://firebase.google.com/)  
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-Utility--First-06B6D4?logo=tailwindcss)](https://tailwindcss.com/)  
+[![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?logo=vercel)](https://vercel.com/)  
 
-Orbit is a modern habit tracking web application built to help users stay consistent and achieve personal growth.
-It combines daily habit tracking, progress visualization, challenges, and streaks with a sleek, optimized UI.
+[**Live Demo 🚀**](https://habit-tracker-app-liard.vercel.app/)  
 
-This project also demonstrates full-stack development skills using React, Redux Toolkit, Firebase, and advanced UI/UX principles, making it both a portfolio-ready showcase and a practical tool for daily use.
+Orbit is a **modern habit tracking web application** built to help users stay consistent and achieve personal growth.  
+It combines **daily habit tracking, progress visualization, challenges, and streaks** with a sleek, optimized UI.  
 
-✨ Features
+This project also demonstrates **full-stack development skills** using **React, Redux Toolkit, Firebase, and advanced UI/UX principles**, making it both a **portfolio-ready showcase** and a **practical tool** for daily use.  
 
-📅 Daily Habit Reset – Automatically resets habits at login each day.
+---
 
-✅ Habit Completion – Mark habits as completed with a single click.
+## ✨ Features  
 
-📊 Progress Charts & Streaks – Visualize your growth and track streaks.
+- 📅 **Daily Habit Reset** – Automatically resets habits at login each day.  
+- ✅ **Habit Completion** – Mark habits as completed with a single click.  
+- 📊 **Progress Charts & Streaks** – Visualize your growth and track streaks.  
+- 🎯 **Challenges & Motivation** – Stay engaged with challenges and streak milestones.  
+- ⚡ **Optimized Performance** – Batched Firestore writes & reduced re-renders.  
+- 🌓 **Light/Dark Mode** – Smooth theme switching for a better user experience.  
+- 🎨 **Modern UI/UX** – Responsive, animated, and mobile-first design.  
+- 🔥 **Realtime Sync** – Firebase Firestore ensures live updates.  
 
-🎯 Challenges & Motivation – Stay engaged with challenges and streak milestones.
+---
 
-⚡ Optimized Performance – Batched Firestore writes & reduced re-renders.
+## 🛠️ Tech Stack  
 
-🌓 Light/Dark Mode – Smooth theme switching for a better user experience.
+### Frontend  
+- **React 18** – UI library  
+- **Redux Toolkit** – State management with async thunks  
+- **TailwindCSS** – Utility-first styling  
+- **GSAP + Particle Effects** – Smooth animations  
 
-🎨 Modern UI/UX – Responsive, animated, and mobile-first design.
+### Backend / Database  
+- **Firebase Firestore** – Realtime NoSQL database  
+- **Firebase Authentication** – Secure user authentication  
 
-🔥 Realtime Sync – Firebase Firestore ensures live updates.
+### Deployment  
+- **Vercel** – Serverless deployment with CI/CD  
 
-🛠️ Tech Stack
-Frontend
+---
 
-React 18 – UI library
+## 🚀 Getting Started  
 
-Redux Toolkit – State management with async thunks
-
-TailwindCSS – Utility-first styling
-
-GSAP + Particle Effects – Smooth animations
-
-Backend / Database
-
-Firebase Firestore – Realtime NoSQL database
-
-Firebase Authentication – Secure user authentication
-
-Deployment
-
-Vercel – Serverless deployment with CI/CD
-
-🚀 Getting Started
-1. Clone the Repository
+### 1. Clone the Repository  
+```bash
 git clone https://github.com/your-username/orbit-habit-tracker.git
 cd orbit-habit-tracker
-
 2. Install Dependencies
+bash
+Copy code
 npm install
-
 3. Setup Firebase
-
 Create a project in Firebase Console.
 
 Enable Authentication and Firestore Database.
 
 Add your Firebase config in src/firebase.js:
 
+js
+Copy code
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
@@ -78,15 +80,15 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
-
 4. Run the App
+bash
+Copy code
 npm run dev
-
-
-Open http://localhost:5173
- in your browser.
+Open http://localhost:5173 in your browser.
 
 📂 Project Structure
+php
+Copy code
 orbit-habit-tracker/
 ├── src/
 │   ├── components/       # UI components (Navbar, Footer, etc.)
@@ -99,9 +101,7 @@ orbit-habit-tracker/
 ├── public/               # Static assets
 ├── package.json
 └── README.md
-
 📈 Optimizations
-
 Performance: Batched Firestore writes instead of multiple updateDoc calls.
 
 Code Quality: Extracted reusable utilities (e.g., getToday()).
@@ -113,7 +113,6 @@ UI/UX: Optimized for mobile-first layout with smooth animations.
 Error Handling: Used rejectWithValue in thunks for clean error states.
 
 🌐 Deployment
-
 Push your repo to GitHub.
 
 Connect it with Vercel.
@@ -125,15 +124,27 @@ Deploy and share your live app! 🚀
 👉 Live Demo Here
 
 🤝 Contributing
-
 Contributions are welcome! Fork the repo, make improvements, and open a pull request.
 
 📜 License
-
 This project is licensed under the MIT License.
 
 👨‍💻 Author
-
 Built with ❤️ by Syed Abdul Qadeer
 Currently pursuing Full-Stack Web Development @ Masai School
 #dailylearning #masaiverse
+
+🔖 Tags
+React · Redux Toolkit · Firebase · TailwindCSS · GSAP · Full-Stack Development · Vercel · Web App · Habit Tracker · Productivity · Portfolio Project
+
+yaml
+Copy code
+
+---
+
+✅ Now your README has:  
+- **Badges** for React, Redux, Firebase, TailwindCSS, and Vercel  
+- **Deployed link** at the top and in Deployment section  
+- **Relevant tags** for GitHub search  
+
+Do you also want me to **add preview screenshots placeholders** (like Home Page, Dashboard, Pr
